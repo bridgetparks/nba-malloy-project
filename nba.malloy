@@ -1,0 +1,131 @@
+source: nba is duckdb.sql("""
+  SELECT 
+    season_year, game_date, gameId, matchup,
+    teamId, teamCity, teamName, teamTricode, teamSlug,
+    personId, personName, position, jerseyNum,
+    fieldGoalsMade, fieldGoalsAttempted, fieldGoalsPercentage,
+    threePointersMade, threePointersAttempted, threePointersPercentage,
+    freeThrowsMade, freeThrowsAttempted, freeThrowsPercentage,
+    reboundsOffensive, reboundsDefensive, reboundsTotal,
+    assists, steals, blocks, turnovers, foulsPersonal,
+    points, plusMinusPoints
+  FROM 'data/regular_season_box_scores_2010_2024_part_1.csv'
+  UNION ALL
+  SELECT 
+    season_year, game_date, gameId, matchup,
+    teamId, teamCity, teamName, teamTricode, teamSlug,
+    personId, personName, position, jerseyNum,
+    fieldGoalsMade, fieldGoalsAttempted, fieldGoalsPercentage,
+    threePointersMade, threePointersAttempted, threePointersPercentage,
+    freeThrowsMade, freeThrowsAttempted, freeThrowsPercentage,
+    reboundsOffensive, reboundsDefensive, reboundsTotal,
+    assists, steals, blocks, turnovers, foulsPersonal,
+    points, plusMinusPoints
+  FROM 'data/regular_season_box_scores_2010_2024_part_2.csv'
+  UNION ALL
+  SELECT 
+    season_year, game_date, gameId, matchup,
+    teamId, teamCity, teamName, teamTricode, teamSlug,
+    personId, personName, position, jerseyNum,
+    fieldGoalsMade, fieldGoalsAttempted, fieldGoalsPercentage,
+    threePointersMade, threePointersAttempted, threePointersPercentage,
+    freeThrowsMade, freeThrowsAttempted, freeThrowsPercentage,
+    reboundsOffensive, reboundsDefensive, reboundsTotal,
+    assists, steals, blocks, turnovers, foulsPersonal,
+    points, plusMinusPoints
+  FROM 'data/regular_season_box_scores_2010_2024_part_3.csv'
+""") extend {
+
+  dimension: era is
+    pick '2010–2014' when season_year = '2010-11' or season_year = '2011-12' or season_year = '2012-13' or season_year = '2013-14' or season_year = '2014-15'
+    pick '2015–2019' when season_year = '2015-16' or season_year = '2016-17' or season_year = '2017-18' or season_year = '2018-19' or season_year = '2019-20'
+    else '2020–2024'
+
+  measure: total_points   is sum(points)
+  measure: total_games    is count()
+  measure: avg_points     is total_points / total_games
+  measure: avg_plus_minus is avg(plusMinusPoints)
+  measure: avg_fg_pct     is avg(fieldGoalsPercentage)
+  measure: avg_three_pct  is avg(threePointersPercentage)
+  measure: avg_assists    is avg(assists)
+  measure: avg_rebounds   is avg(reboundsTotal)
+  measure: win_count      is count() { where: plusMinusPoints > 0 }
+  measure: win_pct        is win_count / total_games
+}
+
+// Q1a: Top scoring teams 2010-2014
+# bar_chart
+run: nba -> {
+  where: era = '2010–2014'
+  group_by: teamName
+  aggregate: total_points, avg_points
+  order_by: total_points desc
+  limit: 10
+}
+
+// Q1b: Top scoring teams 2015-2019
+# bar_chart
+run: nba -> {
+  where: era = '2015–2019'
+  group_by: teamName
+  aggregate: total_points, avg_points
+  order_by: total_points desc
+  limit: 10
+}
+
+// Q1c: Top scoring teams 2020-2024
+# bar_chart
+run: nba -> {
+  where: era = '2020–2024'
+  group_by: teamName
+  aggregate: total_points, avg_points
+  order_by: total_points desc
+  limit: 10
+}
+
+// Q2: Most dominant franchises overall
+# bar_chart
+run: nba -> {
+  group_by: teamName
+  aggregate:
+    avg_plus_minus
+    win_pct
+    avg_points
+  order_by: win_pct desc, avg_plus_minus desc
+  limit: 20
+}
+
+// Q3: Has scoring trended up over time?
+run: nba -> {
+  group_by: season_year
+  aggregate:
+    avg_points
+    avg_three_pct
+    avg_assists
+  order_by: season_year asc
+  limit: 20
+}
+
+// Q4: Wins vs losses statistically
+run: nba -> {
+  group_by: result is pick 'Win' when plusMinusPoints > 0 else 'Loss'
+  aggregate:
+    avg_points
+    avg_fg_pct
+    avg_three_pct
+    avg_assists
+    avg_rebounds
+  order_by: result
+}
+
+
+// Q5: Most dominant single season teams
+run: nba -> {
+  group_by: season_year, teamName
+  aggregate:
+    win_pct
+    avg_plus_minus
+    avg_points
+  order_by: win_pct desc
+  limit: 20
+}
