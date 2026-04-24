@@ -9,9 +9,9 @@ I ended up splitting my first query into three separate queries to make it easie
 
 ![Top scoring teams 2010-2014](screenshots/Q1a_NBA.jpeg)
 
-![Top scoring teams 2015-2019](screenshots/Q1b_NBA.jpeg)
+![Top scoring teams 2015-2019](screenshots/Q1b_NBA.jpg)
 
-![Top scoring teams 2020-2024](screenshots/Q1c_NBA.jpeg)
+![Top scoring teams 2020-2024](screenshots/Q1c_NBA.jpg)
 
 ### Question 2: Which teams have the best plus/minus and win percentage across all seasons — who are the most dominant franchises overall?
 
