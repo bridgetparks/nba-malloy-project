@@ -17,25 +17,25 @@ I ended up splitting my first query into three separate queries to make it easie
 
 For my second query, I ordered first by win percentage and then by average plus minus to determine the most dominant teams between 2010 and 2024. There is a clear correlation between points and wins, but I was especially surprised by the Mavericks, who had a significantly lower plus minus compared to teams with similar win percentages. This means that they likely won a significant number of games by a small margin, and they could have lost some games by large deficits.
 
-![Best plus/minus & win percentage](screenshots/Q2_NBA.jpeg)
+![Best plus/minus & win percentage](screenshots/Q2_NBA.jpg)
 
 ### Question 3: Has the NBA gotten higher scoring over time? Have 3-point percentages and assists also trended up season by season?
 
 To explore the relationship between year and stats like 3-point percent and assists, I grouped the data by season and aggregated points, three percentage, and assists. Generally speaking, all three of the stats that I focused on improved season to season. 2010-2011 was an outlier; average points was significantly higher than the following seasons, and the other two metrics were also lower in following years. I don’t have a concrete explanation for the discrepancy, but consistently higher stats suggest a notable difference in performance.
 
-![Scoring trends](screenshots/Q3_NBA.jpeg)
+![Scoring trends](screenshots/Q3_NBA.jpg)
 
 ### Question 4: What do winning games look like statistically vs losing games?
 
 For this query, I compared how important points, field goal percentage, three percentage, assists, and rebounds are to winning. As expected, each of the metrics I chose to show were higher when teams won; There were not any surprises looking at this data.
 
-![Winning vs losing trends](screenshots/Q4_NBA.jpeg)
+![Winning vs losing trends](screenshots/Q4_NBA.jpg)
 
 ### Question 5: Which teams were the most dominant in a single season, based on highest win percentage and average plus/minus?
 
 To answer this question I ordered the results by win percentage. I found it interesting that some seasons had multiple teams with record high win percentages, reflecting a larger imbalance in wins in these seasons. The rest of the data was unsurprising; teams always had positive average minus stats and performed well in all other areas.
 
-![Most dominant single season teams](screenshots/Q5_NBA.jpeg)
+![Most dominant single season teams](screenshots/Q5_NBA.jpg)
 
 ### So what?
 
